@@ -62,7 +62,7 @@ export class FilesService {
             return "You must provide at least one file"
 
         if (this.exceedMaxSize(...files))
-            return "Files exceed max size"
+            return "File(s) exceed(s) max size"
 
         return
     }

@@ -109,7 +109,7 @@ export class SupabaseService {
         }
 
         return this.snackbarService.init({
-            title: "Files have been uploaded!",
+            title: "File(s) have been uploaded!",
             position: Position.top,
             success: true,
             durationMs: 3500
