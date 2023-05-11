@@ -1,0 +1,81 @@
+<div class="login">
+    <a *ngIf="!loggedIn else loggedOut" (click)="loginPopup.show()"
+        class="login__button btn btn-green">Sign in</a>
+
+    <app-popup #loginPopup class="login__popup popup" [closeOnOutsideClick]="true">
+        <app-tabs [tabs]="[signInTab, signUpTab]" />
+    </app-popup>
+</div>
+
+
+<ng-template #loggedOut>
+    <a (click)="signOut()" class="login__button btn btn-red">Sign Out</a>
+</ng-template>
+
+
+<app-tab #signInTab name="Sign in">
+    <form class="form" [formGroup]="signForm" (ngSubmit)="signInSubmit()">
+
+        <div class="form__field field">
+            <label class="field__label label" for="signin_email">Email:</label>
+            <input class="field__input input" type="email" name="signin_email"
+                placeholder="you@example.com" formControlName="email"
+                [value]="signForm.value.email">
+        </div>
+
+        <div class="form__field field">
+            <label class="field__label label" for="signin_password">Password:</label>
+            <input class="field__input input" [type]="showPassword ? 'text' : 'password'"
+                name="signin_password" formControlName="password" [value]="signForm.value.password">
+            <p class="field__tooltip tooltip">
+                Password must be at least 6 characters long
+            </p>
+
+        </div>
+
+        <div class="form__checkox-field checkbox-field">
+            <label class="checkbox-field__label label" for="showPassword">Show Password:</label>
+            <input class="checkbox-field__input checkbox" type="checkbox" name="showPassword"
+                [checked]="showPassword" (change)="showPassword = !showPassword">
+        </div>
+
+        <button type="submit" class="form__close__button btn btn-green">Sign In</button>
+    </form>
+</app-tab>
+
+
+<app-tab #signUpTab name="Sign up">
+    <form class="form" [formGroup]="signForm" (ngSubmit)="signUpSubmit()">
+        <div class="form__field field">
+            <label class="field__label label" for="signup_email">Email:</label>
+            <input class="field__input input" type="email" name="signup_email"
+                formControlName="email" placeholder="you@example.com"
+                [value]="signForm.value.email">
+        </div>
+
+        <div class="form__field field">
+            <label class="field__label label" for="signin_password">Password:</label>
+            <input class="field__input input" [type]="showPassword ? 'text' : 'password'"
+                name="signin_password" formControlName="password" [value]="signForm.value.password">
+        </div>
+
+        <div class="form__field field">
+            <label class="field__label label" for="signup_password_confirm">Confirm
+                Password:</label>
+            <input class="field__input input" [type]="showPassword ? 'text' : 'password'"
+                name="signup_password_confirm" formControlName="confirm_password">
+            <p class="field__tooltip tooltip">
+                Password must be at least 6 characters long
+            </p>
+        </div>
+
+        <div class="form__checkox-field checkbox-field">
+            <label class="checkbox-field__label label" for="showPassword">Show Password:</label>
+            <input class="checkbox-field__input checkbox" type="checkbox" name="showPassword"
+                [checked]="showPassword" (change)="showPassword = !showPassword">
+        </div>
+
+        <button type="submit" class="form__close__button btn btn-green">Sign Up</button>
+
+    </form>
+</app-tab>

@@ -1,0 +1,20 @@
+<!-- <button (click)="previousTab()">previous</button>
+<button (click)="nextTab()">Next</button> -->
+
+<div class="tabs">
+
+    <nav class="tabs__nav">
+        <ul class="tabs__nav__list list">
+            <li *ngFor="let tab of tabs; index as i" class="tabs__nav__list__item">
+                <button class="tabs__nav__list__item__button" (click)="setTab(i)"
+                    [class.active]="tab == currentTab">{{tab.name}}</button>
+            </li>
+        </ul>
+    </nav>
+
+    <ul class="tabs__list list">
+        <li *ngFor="let tab of tabs" class="tabs__list__item">
+            <ng-container *ngTemplateOutlet="!tab.isHidden ? tab.templateRef : null" />
+        </li>
+    </ul>
+</div>

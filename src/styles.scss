@@ -1,1 +1,176 @@
 /* You can add global styles to this file, and also import other style files */
+
+body {
+    margin: 0px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+}
+
+:root {
+    --hover-opacity: 0.8;
+
+    --mantle: #e6e9ef;
+    --base: #eff1f5;
+    --text: #4c4f69;
+    --surface0: #ccd0da;
+    --surface1: #bcc0cc;
+    --surface2: #acb0be;
+    --overlay0: #9ca0b0;
+
+    --mauve: #8839ef;
+    --green: #40a02b;
+    --red: #d20f39;
+
+    --mauve-filter: invert(23%) sepia(74%) saturate(5228%) hue-rotate(261deg) brightness(100%) contrast(88%);
+
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+
+    color: var(--text);
+    background-color: var(--base);
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+}
+
+[data-theme="dark"] {
+    --mantle: #181825;
+    --base: #1e1e2e;
+    --text: #cdd6f4;
+    --surface0: #313244;
+    --surface1: #45475a;
+    --surface2: #585b70;
+    --overlay0: #6c7086;
+
+    --mauve: #cba6f7;
+    --green: #a6e3a1;
+    --red: #f38ba8;
+
+    --active: #cba6f7ac;
+
+    --mauve-filter: invert(71%) sepia(75%) saturate(904%) hue-rotate(202deg) brightness(100%) contrast(94%);
+
+}
+
+
+
+
+.link {
+    text-decoration: none;
+    color: var(--mauve);
+
+    &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
+
+.list {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+
+    @media (prefers-color-scheme: light) {
+        mix-blend-mode: multiply;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.btn {
+    &-green {
+        background-color: var(--green);
+
+        &:hover {
+            color: var(--green);
+        }
+    }
+
+    &-red {
+        background-color: var(--red);
+
+        &:hover {
+            color: var(--red);
+        }
+    }
+
+    background-color: var(--text);
+    color: var(--mantle);
+
+    padding: 5px 24px;
+    border-radius: 7px;
+    border: none;
+    font-size: 1em;
+
+    &:hover {
+        background-color: var(--mantle);
+        cursor: pointer;
+    }
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2em;
+    gap: 20px;
+
+
+    .field {
+        display: flex;
+        flex-direction: column;
+
+        .label {}
+
+        .input {
+            font-size: 1em;
+            padding: 5px;
+            min-width: 100px;
+            width: 100%;
+
+            background-color: var(--mantle);
+            color: var(--text);
+            border: none;
+
+            &:focus-visible {
+                outline: none;
+            }
+
+        }
+
+    }
+
+    .tooltip {
+        font-size: 0.7em;
+    }
+
+    .checkbox-field {
+
+        .label {}
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    .title {}
+}

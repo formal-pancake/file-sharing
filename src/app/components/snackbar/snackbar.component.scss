@@ -1,0 +1,48 @@
+.snackbar {
+    display: block;
+    position: absolute;
+
+    color: var(--mantle);
+    border: 2px solid var(--mauve);
+    background-color: var(--mantle);
+    border-radius: 12px;
+    text-align: center;
+    font-size: 1.2em;
+
+    z-index: 999;
+
+    &__text {
+        margin: 8px;
+        padding: 5px;
+    }
+}
+
+.success {
+    color: var(--green);
+}
+
+.failure {
+    color: var(--red);
+}
+
+.top {
+    left: 0;
+    right: 0;
+    top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+}
+
+.bottom {
+    left: 0;
+    right: 0;
+    bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+}
+
+.hidden {
+    display: none;
+}

@@ -1,0 +1,18 @@
+<div class="upload" appDragDropFileUpload [ngClass]="dragHover ? 'hover' : ''"
+    (dragHover)="dragHover = $event" (fileDropped)="importFiles($event)"
+    (click)="fileInput.click()">
+    <h1 class="upload__title">Drag and drop files or click to import</h1>
+    <img src="/assets/upload.svg" alt="upload icon" class="upload__icon img">
+    <ul class="upload__files-list list">
+        <li class="upload__files-list__item" *ngFor="let file of files">
+            <p class="upload__files-list__item__content">
+                {{file.name}}
+                <span class="upload__files-list__item__content__size"> {{getFileSizeMb(file)}}
+                </span>
+            </p>
+        </li>
+    </ul>
+</div>
+
+<input type="file" name="fileInput" id="fileInput" class="hidden" #fileInput multiple
+    (change)="onChange($event)">

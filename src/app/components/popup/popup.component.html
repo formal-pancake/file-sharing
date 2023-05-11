@@ -1,0 +1,6 @@
+<div class="popup" *ngIf="isOpen" [class.hidden]="!isOpen">
+    <div class="popup__overlay" (click)="closeOnOverlayClick()"></div>
+    <div class="popup__dialog-content">
+        <ng-content></ng-content>
+    </div>
+</div>
