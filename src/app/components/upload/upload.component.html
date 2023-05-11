@@ -3,11 +3,27 @@
     (click)="fileInput.click()">
     <h1 class="upload__title">Drag and drop files or click to import</h1>
     <img src="/assets/upload.svg" alt="upload icon" class="upload__icon img">
+    <ul class="upload__info list" [ngClass]="files.length ? 'border-bottom' : ''">
+        <p class="upload__info__current">
+            Current size:
+            <span class="upload__info__current__size file-size"
+                [ngClass]="!isFilesTooBig ? 'valid' : ''">
+                {{totalSize.size}} {{totalSize.postfix}}
+            </span>
+        </p>
+        <p class="upload__info__max">
+            Max upload:
+            <span class="upload__info__max__size file-size">
+                50 MB
+            </span>
+        </p>
+    </ul>
     <ul class="upload__files-list list">
         <li class="upload__files-list__item" *ngFor="let file of files">
             <p class="upload__files-list__item__content">
                 {{file.name}}
-                <span class="upload__files-list__item__content__size"> {{getFileSizeMb(file)}}
+                <span class="upload__files-list__item__content__size file-size">
+                    {{getFileSizeString(file).size}} {{getFileSizeString(file).postfix}}
                 </span>
             </p>
         </li>

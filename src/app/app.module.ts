@@ -16,6 +16,7 @@ import { TabComponent } from './components/tab/tab.component';
 
 import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.directive';
 import { SnackbarComponent } from './components/snackbar/snackbar.component';
+import { DasbboardComponent } from './pages/dasbboard/dasbboard.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { SnackbarComponent } from './components/snackbar/snackbar.component';
         TabsComponent,
         TabComponent,
         SnackbarComponent,
+        DasbboardComponent,
     ],
     imports: [
         BrowserModule,

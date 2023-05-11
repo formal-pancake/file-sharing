@@ -13,6 +13,11 @@
     padding: 12px;
     cursor: pointer;
 
+    &__info {
+        display: flex;
+        gap: 20px;
+    }
+
     &__icon {
         width: 80px;
 
@@ -23,10 +28,23 @@
         &__item {
             &__content {
                 &__size {
-                    color: var(--red);
-                    font-weight: bolder;
+                    // color: var(--red);
+                    // font-weight: bolder;
                 }
             }
         }
     }
+}
+
+.file-size {
+    color: var(--red);
+    font-weight: bolder;
+}
+
+.border-bottom {
+    border-bottom: 1px solid var(--text);
+}
+
+.valid {
+    color: var(--green);
 }

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { FilesService } from 'src/app/services/files.service';
 
 @Component({
     selector: 'app-upload',
@@ -7,24 +8,30 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class UploadComponent {
     dragHover = false;
-    files: File[] = []
+    files: File[] = [];
+
+    get totalSize() {
+        return this.getFileSizeString(...this.files)
+    }
+
+    get isFilesTooBig() {
+        return this.filesService.exceedMaxSize(...this.files)
+    }
+
+    constructor(private filesService: FilesService) {
+        this.files = filesService.files;
+    }
 
     importFiles(event: any) {
         const fileList = Array.from(event) as File[];
-        this.files = fileList;
-        // this.files = this.service.addFiles(fileList);
+        this.files = this.filesService.setFiles(...fileList);
     }
 
     onChange(event: any) {
-        // this.files = this.service.addFiles(event.target.files)
-        this.files = event.target.files;
+        this.files = this.filesService.setFiles(...event.target.files);
     }
 
-    getFileSizeMb(file: File) {
-        if (file.size < 1000000) {
-            return (file.size / 1024).toFixed(2) + " KB";
-        } else {
-            return (file.size / 1000000).toFixed(2) + " MB";
-        }
+    getFileSizeString(...files: File[]) {
+        return this.filesService.getFileSize(...files).auto
     }
 }
