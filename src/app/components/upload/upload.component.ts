@@ -32,6 +32,6 @@ export class UploadComponent {
     }
 
     getFileSizeString(...files: File[]) {
-        return this.filesService.getFileSize(...files).auto
+        return this.filesService.getFilesSize(...files).auto
     }
 }

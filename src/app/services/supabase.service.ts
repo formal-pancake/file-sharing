@@ -19,6 +19,14 @@ export class SupabaseService {
     private supabase: SupabaseClient
     authChangeEvent = new EventEmitter<{ event: AuthChangeEvent, session: AuthSession | null }>()
 
+    get session(): Promise<AuthSession | null> {
+        return new Promise((resolve, reject) => {
+            this.supabase.auth.getSession().then(({ data }) => {
+                resolve(data.session)
+            })
+        });
+    }
+
     constructor(
         private snackbarService: SnackbarService,
         private filesService: FilesService
@@ -27,14 +35,6 @@ export class SupabaseService {
         this.supabase.auth.onAuthStateChange((event, session) => {
             this.authChangeEvent.emit({ event, session });
         })
-    }
-
-    get session(): Promise<AuthSession | null> {
-        return new Promise((resolve, reject) => {
-            this.supabase.auth.getSession().then(({ data }) => {
-                resolve(data.session)
-            })
-        });
     }
 
     signIn(email: string, password: string) {
@@ -67,7 +67,7 @@ export class SupabaseService {
 
         if (!session) {
             return this.snackbarService.init({
-                title: "You must be logged in to do that",
+                title: "You must be signed in to upload files",
                 position: Position.top,
                 success: false,
                 durationMs: 3500
@@ -85,7 +85,7 @@ export class SupabaseService {
             })
         }
 
-        let file = await this.zipFiles(...files);
+        let file = files.length > 1 ? await this.zipFiles(...files) : files[0];
 
         // ToDo: Create upload element in database and link it to the user
 

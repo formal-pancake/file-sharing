@@ -39,7 +39,7 @@ export class SnackbarComponent {
     }
 
     constructor(private snackbarService: SnackbarService) {
-        snackbarService.onDisplay.subscribe(({ title, durationMs, position, success }) => {
+        snackbarService.onInit.subscribe(({ title, durationMs, position, success }) => {
             this.close(); // close the snackbar if one was already playing
 
             this._title = title;

@@ -15,6 +15,7 @@ h6 {
 
 :root {
     --hover-opacity: 0.8;
+    transition: 0.3s;
 
     --mantle: #e6e9ef;
     --base: #eff1f5;
@@ -46,6 +47,8 @@ h6 {
 }
 
 [data-theme="dark"] {
+    transition: 0.3s;
+
     --mantle: #181825;
     --base: #1e1e2e;
     --text: #cdd6f4;
@@ -99,6 +102,7 @@ h6 {
 }
 
 .btn {
+
     &-green {
         background-color: var(--green);
 
@@ -121,11 +125,14 @@ h6 {
     padding: 5px 24px;
     border-radius: 7px;
     border: none;
-    font-size: 1em;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: 0.3s;
+
+
 
     &:hover {
         background-color: var(--mantle);
-        cursor: pointer;
     }
 }
 
@@ -147,6 +154,8 @@ h6 {
             padding: 5px;
             min-width: 100px;
             width: 100%;
+            min-width: 280px;
+
 
             background-color: var(--mantle);
             color: var(--text);

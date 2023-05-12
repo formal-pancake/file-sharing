@@ -74,22 +74,15 @@ export class LoginComponent {
     }
 
     signUpSubmit() {
-        if (this.signUpCheck().length) {
-            // TODO display snack bar
-            // alert(this.signUpCheckMessage)
+        if (this.signUpCheck().length)
+            return this.snackbarError(this.signUpCheckMessage)
 
-            this.snackbarError(this.signUpCheckMessage);
-
-            return
-        }
 
         const { email, password } = this.signForm.value
         this.supabaseService.signUp(email!, password!).then(c => {
-            console.log(c);
+            if (c.error)
+                return this.snackbarError(c.error.message)
 
-            if (c.error) {
-                return this.snackbarError(c.error.message);
-            }
 
             this.snackbarService.init({
                 title: "Signed Up!",
@@ -104,19 +97,13 @@ export class LoginComponent {
 
     signInSubmit() {
 
-        if (this.signInCheck().length) {
-            this.snackbarError(this.signInCheckMessage);
-
-            return
-        }
+        if (this.signInCheck().length)
+            return this.snackbarError(this.signInCheckMessage)
 
         const { email, password } = this.signForm.value
         this.supabaseService.signIn(email!, password!).then(c => {
-            console.log(c);
-
-            if (c.error) {
-                return this.snackbarError(c.error.message);
-            }
+            if (c.error)
+                return this.snackbarError(c.error.message)
 
             this.snackbarService.init({
                 title: "Signed In!",

@@ -1,6 +1,6 @@
 <div class="login">
-    <a *ngIf="!loggedIn else loggedOut" (click)="loginPopup.show()"
-        class="login__button btn btn-green">Sign in</a>
+    <button *ngIf="!loggedIn else loggedOut" (click)="loginPopup.show()"
+        class="login__button btn btn-green">Sign in</button>
 
     <app-popup #loginPopup class="login__popup popup" [closeOnOutsideClick]="true">
         <app-tabs [tabs]="[signInTab, signUpTab]" />
@@ -9,7 +9,7 @@
 
 
 <ng-template #loggedOut>
-    <a (click)="signOut()" class="login__button btn btn-red">Sign Out</a>
+    <button (click)="signOut()" class="login__button btn btn-red">Sign Out</button>
 </ng-template>
 
 

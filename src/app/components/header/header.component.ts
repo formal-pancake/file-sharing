@@ -10,9 +10,10 @@ export class HeaderComponent implements OnInit {
     ngOnInit(): void {
         // Check if the user has set a preference for light or dark mode
         const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const storageTheme = localStorage.getItem('theme');
 
         // Set the initial theme based on the user's preference or default to light mode
-        document.documentElement.setAttribute('data-theme', prefersDarkMode ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', storageTheme ? storageTheme : prefersDarkMode ? 'dark' : 'light');
     }
 
 
@@ -21,5 +22,6 @@ export class HeaderComponent implements OnInit {
         const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
         document.documentElement.setAttribute('data-theme', targetTheme);
+        localStorage.setItem('theme', targetTheme);
     }
 }

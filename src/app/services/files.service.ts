@@ -13,7 +13,7 @@ export class FilesService {
     }
 
     get totalSize() {
-        return this.getFileSize(...this.files)
+        return this.getFilesSize(...this.files)
     }
 
     maxSizeMb: number;
@@ -24,12 +24,11 @@ export class FilesService {
 
     setFiles(...files: File[]): File[] {
         this._files = files;
-        console.log(this.files);
 
         return this.files;
     }
 
-    getFileSize(...files: File[]) {
+    getFilesSize(...files: File[]) {
         let size = 0;
         files.forEach(file => {
             size += file.size;
@@ -68,6 +67,6 @@ export class FilesService {
     }
 
     exceedMaxSize(...files: File[]) {
-        return this.getFileSize(...files).mb.size > this.maxSizeMb
+        return this.getFilesSize(...files).mb.size > this.maxSizeMb
     }
 }

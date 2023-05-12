@@ -21,10 +21,10 @@ export type snackbarSettings = {
 })
 export class SnackbarService {
 
-    onDisplay = new EventEmitter<snackbarSettings>();
+    onInit = new EventEmitter<snackbarSettings>();
 
     init(settings: snackbarSettings) {
-        this.onDisplay.emit(settings);
+        this.onInit.emit(settings);
     }
 
 }
