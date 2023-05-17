@@ -8,7 +8,6 @@ import {
     User,
 } from '@supabase/supabase-js'
 import { environment } from 'src/environments/environment'
-import * as JSZip from 'jszip';
 import { Position, SnackbarService } from './snackbar.service';
 import { FilesService } from './files.service';
 
@@ -49,19 +48,6 @@ export class SupabaseService {
         return this.supabase.auth.signOut()
     }
 
-    async zipFiles(...files: File[]) {
-        const zip = new JSZip();
-
-        let folder = zip.folder("files");
-
-        files.forEach(file => {
-            folder?.file(file.name, file);
-        });
-
-        const content = await zip.generateAsync({ type: "blob" });
-        return new File([content], "files.zip", { type: "application/zip" })
-    }
-
     async uploadFiles(...files: File[]) {
         const session = await this.session;
 
@@ -85,16 +71,30 @@ export class SupabaseService {
             })
         }
 
-        let file = files.length > 1 ? await this.zipFiles(...files) : files[0];
+        let file = files.length > 1 ? await this.filesService.zipFiles(...files) : files[0];
 
-        // ToDo: Create upload element in database and link it to the user
+        const { data: fileData, error: fileInsertError } = await this.supabase
+            .from('files')
+            .insert({
+                owner_id: session.user.id,
+            }).select('id, name');
+
+        console.log(fileData);
 
 
-        // ToDo: Use upload element id from databse for the folder's name
+        if (fileInsertError) {
+            return this.snackbarService.init({
+                title: fileInsertError.message,
+                position: Position.top,
+                success: false,
+                durationMs: 3500
+            })
+        }
+
         const { data, error } = await this.supabase
             .storage
             .from('files')
-            .upload(`${session.user.id}-${Date.now()}`, file, {
+            .upload(fileData[0].id, file, {
                 cacheControl: '3600',
                 upsert: false
             });
@@ -117,17 +117,20 @@ export class SupabaseService {
     }
 
     async fetchFiles() {
+        const session = await this.session;
+
         const { data, error } = await this.supabase
-            .storage
             .from('files')
-            .list();
+            .select('*');
+
+        this.supabase.storage.from('files')
+            .createSignedUrl("023a07c7-458c-4591-b6ea-6e32d236e8ac", 60)
+            .then((e) => {
+                console.log(e.data?.signedUrl);
+                console.log(e);
 
 
-        console.log(data);
-        console.error(error);
-
-
+            })
+        return data
     }
-
-
 }

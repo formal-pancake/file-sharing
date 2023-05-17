@@ -2,3 +2,7 @@
     <app-upload></app-upload>
     <button class="home__button btn btn-green" (click)="uploadFiles()">Upload</button>
 </div>
+
+<app-popup #loadingPopup class="popup" [closeOnOutsideClick]="false">
+    <img class="popup__image img" src="/assets/loading.svg" alt="loading...">
+</app-popup>

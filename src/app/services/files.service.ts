@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SnackbarService } from './snackbar.service';
+import * as JSZip from 'jszip';
 
 @Injectable({
     providedIn: 'root'
@@ -68,5 +69,18 @@ export class FilesService {
 
     exceedMaxSize(...files: File[]) {
         return this.getFilesSize(...files).mb.size > this.maxSizeMb
+    }
+
+    async zipFiles(...files: File[]) {
+        const zip = new JSZip();
+
+        let folder = zip.folder("files");
+
+        files.forEach(file => {
+            folder?.file(file.name, file);
+        });
+
+        const content = await zip.generateAsync({ type: "blob" });
+        return new File([content], Date.now + ".zip", { type: "application/zip" })
     }
 }

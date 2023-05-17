@@ -7,8 +7,11 @@ import { SupabaseService } from 'src/app/services/supabase.service';
     styleUrls: ['./dasbboard.component.scss']
 })
 export class DasbboardComponent {
+    files: any[] | null = [];
 
     constructor(private supabaseService: SupabaseService) {
-        supabaseService.fetchFiles();
+        supabaseService.fetchFiles().then(e => {
+            this.files = e
+        });
     }
 }

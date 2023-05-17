@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { PopupComponent } from 'src/app/components/popup/popup.component';
 import { FilesService } from 'src/app/services/files.service';
 import { SupabaseService } from 'src/app/services/supabase.service';
 
@@ -16,7 +17,13 @@ export class HomeComponent {
 
     }
 
+    @ViewChild('loadingPopup', { static: true })
+    popupRef: PopupComponent | null = null;
+
     uploadFiles() {
-        this.supabaseService.uploadFiles(...this.filesService.files);
+        this.popupRef?.show();
+        this.supabaseService.uploadFiles(...this.filesService.files).then(() => {
+            this.popupRef?.hide();
+        })
     }
 }
