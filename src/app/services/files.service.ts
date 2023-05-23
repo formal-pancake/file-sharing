@@ -1,6 +1,16 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { SnackbarService } from './snackbar.service';
 import * as JSZip from 'jszip';
+
+function EmitOnChangeEvent(target: any, propertyKey: string, descriptor: PropertyDescriptor | any) {
+    const originalMethod = descriptor.value;
+
+    descriptor.value = function (...args: any[]) {
+        const result = originalMethod.apply(this, args);
+        this.onChange.emit(this._files);
+        return result
+    }
+}
 
 @Injectable({
     providedIn: 'root'
@@ -8,6 +18,7 @@ import * as JSZip from 'jszip';
 export class FilesService {
 
     private _files: File[] = []
+    onChange = new EventEmitter<File[]>();
 
     get files() {
         return this._files
@@ -17,12 +28,22 @@ export class FilesService {
         return this.getFilesSize(...this.files)
     }
 
-    maxSizeMb: number;
-
-    constructor(private snackbarService: SnackbarService) {
-        this.maxSizeMb = 50
+    get maxSizeMb() {
+        return 50
     }
 
+    constructor(private snackbarService: SnackbarService) {
+
+    }
+
+    @EmitOnChangeEvent
+    clearFiles() {
+        this.setFiles(...[]);
+
+        return this.files;
+    }
+
+    @EmitOnChangeEvent
     setFiles(...files: File[]): File[] {
         this._files = files;
 

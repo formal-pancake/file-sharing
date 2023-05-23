@@ -10,8 +10,8 @@ export class DasbboardComponent {
     files: any[] | null = [];
 
     constructor(private supabaseService: SupabaseService) {
-        supabaseService.fetchFiles().then(e => {
-            this.files = e
+        supabaseService.fetchFiles().then(files => {
+            this.files = files ?? null
         });
     }
 }

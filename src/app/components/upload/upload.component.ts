@@ -20,15 +20,19 @@ export class UploadComponent {
 
     constructor(private filesService: FilesService) {
         this.files = filesService.files;
+
+        filesService.onChange.subscribe(files => {
+            this.files = files;
+        })
     }
 
     importFiles(event: any) {
         const fileList = Array.from(event) as File[];
-        this.files = this.filesService.setFiles(...fileList);
+        this.filesService.setFiles(...fileList);
     }
 
     onChange(event: any) {
-        this.files = this.filesService.setFiles(...event.target.files);
+        this.filesService.setFiles(...event.target.files);
     }
 
     getFileSizeString(...files: File[]) {

@@ -51,6 +51,7 @@ export class SupabaseService {
     async uploadFiles(...files: File[]) {
         const session = await this.session;
 
+        // check if the user is signed in
         if (!session) {
             return this.snackbarService.init({
                 title: "You must be signed in to upload files",
@@ -73,13 +74,12 @@ export class SupabaseService {
 
         let file = files.length > 1 ? await this.filesService.zipFiles(...files) : files[0];
 
-        const { data: fileData, error: fileInsertError } = await this.supabase
+        // insert new row in the 'files' table
+        const { data: fileDbData, error: fileInsertError } = await this.supabase
             .from('files')
             .insert({
                 owner_id: session.user.id,
             }).select('id, name');
-
-        console.log(fileData);
 
 
         if (fileInsertError) {
@@ -91,22 +91,22 @@ export class SupabaseService {
             })
         }
 
-        const { data, error } = await this.supabase
+        // upload file in the 'files' bucket
+        const { data: fileUploadData, error: fileUploadError } = await this.supabase
             .storage
             .from('files')
-            .upload(fileData[0].id, file, {
-                cacheControl: '3600',
-                upsert: false
-            });
+            .upload(fileDbData[0].id, file);
 
-        if (error) {
+        if (fileUploadError) {
             return this.snackbarService.init({
-                title: error.message,
+                title: fileUploadError.message,
                 position: Position.top,
                 success: false,
                 durationMs: 3500
             })
         }
+
+        this.filesService.clearFiles();
 
         return this.snackbarService.init({
             title: "File(s) have been uploaded!",
@@ -117,20 +117,67 @@ export class SupabaseService {
     }
 
     async fetchFiles() {
+        // ToDo: probably make a property 'loggedIn' instead of this
         const session = await this.session;
+
+        // check if the user is signed in
+        if (!session) {
+            return this.snackbarService.init({
+                title: "You must be signed in to upload files",
+                position: Position.top,
+                success: false,
+                durationMs: 3500
+            })
+        }
 
         const { data, error } = await this.supabase
             .from('files')
             .select('*');
 
-        this.supabase.storage.from('files')
-            .createSignedUrl("023a07c7-458c-4591-b6ea-6e32d236e8ac", 60)
-            .then((e) => {
-                console.log(e.data?.signedUrl);
-                console.log(e);
-
-
+        if (error) {
+            return this.snackbarService.init({
+                title: error.message,
+                position: Position.top,
+                success: false,
+                durationMs: 3500
             })
+        }
+
         return data
+    }
+
+    async generateUploadUrl(id: string, expiresInSeconds: number) {
+        // ToDo: probably make a property 'loggedIn' instead of this
+        const session = await this.session;
+
+        // check if the user is signed in
+        if (!session) {
+            return this.snackbarService.init({
+                title: "You must be signed in to upload files",
+                position: Position.top,
+                success: false,
+                durationMs: 3500
+            })
+        }
+
+        const { data, error } = await this.supabase
+            .from('files')
+            .select('id, name')
+            .filter('id', 'eq', id);
+
+        if (!data || error) {
+            return this.snackbarService.init({
+                title: error.message,
+                position: Position.top,
+                success: false,
+                durationMs: 3500
+            })
+        }
+
+
+        return await this.supabase
+            .storage
+            .from('files')
+            .createSignedUrl(data[0].id, expiresInSeconds, { download: data[0].name })
     }
 }
