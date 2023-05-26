@@ -9,10 +9,12 @@ export class PopupComponent {
 
     @Input() closeOnOutsideClick = true;
     @Input() isOpen = false;
+    @Input() args: any[] = [];
 
-    show() {
+    show(...args: any[]) {
         this.isOpen = true;
         document.body.style.overflow = 'hidden';
+        this.args = args;
     }
 
     hide() {

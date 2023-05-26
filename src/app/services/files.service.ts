@@ -102,6 +102,7 @@ export class FilesService {
         });
 
         const content = await zip.generateAsync({ type: "blob" });
-        return new File([content], Date.now + ".zip", { type: "application/zip" })
+        const name = files[0].name.split('.')[0];
+        return new File([content], `bundle of  ${name}`, { type: "application/zip" })
     }
 }

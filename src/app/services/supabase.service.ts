@@ -72,6 +72,12 @@ export class SupabaseService {
             })
         }
 
+        let description = "";
+
+        files.map(file => {
+            description += `- ${file.name}\n`
+        })
+
         let file = files.length > 1 ? await this.filesService.zipFiles(...files) : files[0];
 
         // insert new row in the 'files' table
@@ -79,7 +85,10 @@ export class SupabaseService {
             .from('files')
             .insert({
                 owner_id: session.user.id,
-            }).select('id, name');
+                name: file.name,
+                description: description
+            })
+            .select('id, name');
 
 
         if (fileInsertError) {
@@ -95,7 +104,7 @@ export class SupabaseService {
         const { data: fileUploadData, error: fileUploadError } = await this.supabase
             .storage
             .from('files')
-            .upload(fileDbData[0].id, file);
+            .upload(`${session.user.id}/${fileDbData[0].id}`, file);
 
         if (fileUploadError) {
             return this.snackbarService.init({
@@ -160,12 +169,64 @@ export class SupabaseService {
             })
         }
 
-        const { data, error } = await this.supabase
+        return await this.supabase
+            .storage
             .from('files')
-            .select('id, name')
-            .filter('id', 'eq', id);
+            .createSignedUrl(`${session.user.id}/${id}`, expiresInSeconds)
+    }
 
-        if (!data || error) {
+    async downloadFile(id: string) {
+        const session = await this.session;
+
+        // check if the user is signed in
+        if (!session) {
+            this.snackbarService.init({
+                title: "You must be signed in to upload files",
+                position: Position.top,
+                success: false,
+                durationMs: 3500
+            })
+
+            return { data: null, error: new Error() }
+        }
+
+        return this.supabase
+            .storage
+            .from('files')
+            .download(`${session.user.id}/${id}`) as Promise<{
+                data: Blob;
+                error: null;
+            }>
+    }
+
+    async deleteFile(fileId: string) {
+
+        // ToDo: probably make a property 'loggedIn' instead of this
+        const session = await this.session;
+
+        // check if the user is signed in
+        if (!session) {
+            return this.snackbarService.init({
+                title: "You must be signed in to upload files",
+                position: Position.top,
+                success: false,
+                durationMs: 3500
+            })
+        }
+
+        // delete row
+        await this.supabase
+            .from('files')
+            .delete()
+            .eq('id', fileId);
+
+        // delete from bucket
+        const { data, error } = await this.supabase
+            .storage
+            .from('files')
+            .remove([`${session.user.id}/${fileId}`])
+
+        if (error) {
             return this.snackbarService.init({
                 title: error.message,
                 position: Position.top,
@@ -175,9 +236,53 @@ export class SupabaseService {
         }
 
 
-        return await this.supabase
-            .storage
-            .from('files')
-            .createSignedUrl(data[0].id, expiresInSeconds, { download: data[0].name })
+        return this.snackbarService.init({
+            title: "File deleted",
+            position: Position.top,
+            success: true,
+            durationMs: 3500
+        })
+
     }
+
+
+    async editFileName(fileId: string, newName: string) {
+        const session = await this.session;
+
+        // check if the user is signed in
+        if (!session) {
+            this.snackbarService.init({
+                title: "You must be signed in to to this",
+                position: Position.top,
+                success: false,
+                durationMs: 3500
+            })
+
+            return
+        }
+
+        const { data, error } = await this.supabase
+            .from('files')
+            .update({ name: newName })
+            .eq("id", fileId);
+
+        if (error) {
+            return this.snackbarService.init({
+                title: error.message,
+                position: Position.top,
+                success: false,
+                durationMs: 3500
+            })
+        }
+
+        return this.snackbarService.init({
+            title: "Renamed file",
+            position: Position.top,
+            success: true,
+            durationMs: 3500
+        })
+
+
+    }
+
 }

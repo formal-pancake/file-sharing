@@ -1,13 +1,57 @@
-<ul>
-    <li *ngFor="let file of files">
-        <p>
-            {{file.name}}
-        </p>
-        <p>
-            {{file.id}}
-        </p>
-        <p>
-            {{file.created_at}}
-        </p>
+<ul class="files list">
+    <li class="files__item" *ngFor="let file of files">
+        <div class="files__item__content">
+
+            <h1 class="files__item__content__name">
+                {{file.name}}
+            </h1>
+            <p class="files__item__content__info">
+                <span class="files__item__content__info__id">
+                    {{file.id}}
+                </span>
+                <span class="files__item__content__info__date">
+                    {{file.created_at}}
+                </span>
+            </p>
+            <p class="files__item__content__description">{{file.description}}</p>
+        </div>
+        <div class="files__item__buttons">
+            <img src="/assets/trash.svg" alt="delete" class="files__item__buttons__delete icon "
+                (click)="deletePopup.show(file)">
+            <img src="/assets/edit.svg" alt="rename" class="files__item__buttons__edit icon "
+                (click)="editPopup.show(file)">
+            <img src="/assets/link.svg" alt="copy link" class="files__item__buttons__share icon "
+                (click)="createUrl(file, 3600)">
+            <img src="/assets/download.svg" alt="download"
+                class="files__item__buttons__download icon" (click)="downloadFile(file)">
+        </div>
     </li>
 </ul>
+
+<app-popup #deletePopup id="deletePopup">
+    <h1>Delete the file?</h1>
+
+    <div class="buttons">
+        <button class="buttons__cancel btn btn-green" (click)="deletePopup.hide()">Cancel</button>
+        <button class="buttons__delete btn btn-red"
+            (click)="popupDelete(deletePopup.args[0], deletePopup)">Delete</button>
+    </div>
+</app-popup>
+
+
+<app-popup #editPopup id="editPopup">
+    <h1>Rename file?</h1>
+
+    <label for="newName" class="label">New name</label>
+    <input type="text" name="newName" class="input" #input>
+    <div class="buttons">
+        <button class="buttons__cancel btn btn-red" (click)="editPopup.hide()">Cancel</button>
+        <button class="buttons__rename btn btn-green"
+            (click)="popupRename(editPopup.args[0], input.value, editPopup)">Confirm</button>
+    </div>
+</app-popup>
+
+<app-popup #link>
+
+
+</app-popup>

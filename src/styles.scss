@@ -32,6 +32,8 @@ h6 {
 
     --mauve-filter: invert(23%) sepia(74%) saturate(5228%) hue-rotate(261deg) brightness(100%) contrast(88%);
     --blue-filter: invert(32%) sepia(95%) saturate(1343%) hue-rotate(206deg) brightness(91%) contrast(113%);
+    --red-filter: invert(12%) sepia(89%) saturate(4240%) hue-rotate(338deg) brightness(104%) contrast(99%);
+    --green-filter: invert(45%) sepia(48%) saturate(628%) hue-rotate(63deg) brightness(103%) contrast(100%);
 
     font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
     font-size: 18px;
@@ -67,6 +69,8 @@ h6 {
 
     --mauve-filter: invert(71%) sepia(75%) saturate(904%) hue-rotate(202deg) brightness(100%) contrast(94%);
     --blue-filter: invert(80%) sepia(45%) saturate(3135%) hue-rotate(185deg) brightness(97%) contrast(103%);
+    --red-filter: invert(81%) sepia(11%) saturate(3879%) hue-rotate(294deg) brightness(100%) contrast(91%);
+    --green-filter: invert(89%) sepia(22%) saturate(593%) hue-rotate(57deg) brightness(96%) contrast(86%);
 }
 
 
@@ -103,6 +107,10 @@ h6 {
 }
 
 .btn {
+    &:hover {
+        background-color: var(--mantle);
+        color: var(--text);
+    }
 
     &-green {
         background-color: var(--green);
@@ -131,10 +139,24 @@ h6 {
     transition: 0.3s;
 
 
+}
 
-    &:hover {
-        background-color: var(--mantle);
+.input {
+    font-size: 1em;
+    padding: 5px;
+    min-width: 100px;
+    width: 100%;
+    min-width: 280px;
+
+
+    background-color: var(--mantle);
+    color: var(--text);
+    border: none;
+
+    &:focus-visible {
+        outline: none;
     }
+
 }
 
 .form {
@@ -150,23 +172,7 @@ h6 {
 
         .label {}
 
-        .input {
-            font-size: 1em;
-            padding: 5px;
-            min-width: 100px;
-            width: 100%;
-            min-width: 280px;
 
-
-            background-color: var(--mantle);
-            color: var(--text);
-            border: none;
-
-            &:focus-visible {
-                outline: none;
-            }
-
-        }
 
     }
 
@@ -185,4 +191,15 @@ h6 {
     }
 
     .title {}
+}
+
+.icon {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.label {
+    font-size: 1.2em;
+
 }
